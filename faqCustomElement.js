@@ -1,81 +1,79 @@
-class FAQElement extends HTMLElement {
-  constructor() {
-    super();
-    this.attachShadow({ mode: "open" });
+// Data for the FAQ
+const faqData = [
+  {
+    question: "Do the mock exams cost extra compared to Term 1 classes?",
+    answer: "At Loyola, we have four terms of classes to get you ready for the GATE exam. These are Year 5 Term 2, Term 3, Term 4, and the Year 6 Mock Exams. The good news is that our mock exams are the same as our Term 1 classes, so no extra fees! We start early so we can finish all five exams before the big GATE exam on March 15th."
+  },
+  {
+    question: "Many of the other GATE companies do not share their exam papers, can we take Loyola papers home?",
+    answer: "Yes of course! There is no point in taking the exam if you can’t take the exam home afterwards. Other companies might not allow students to take their papers home because they might be embarrassed of their material and afraid of parents finding out of their quality. We think it's important to be able to take your exam home to look over it later."
+  },
+  {
+    question: "What if I can't make it to the class because of the holidays?",
+    answer: "If you're away, you can still join in online on Fridays through Zoom for any classes you miss. When you're back, you can go back to taking the exams at Murdoch University. We HIGHLY recommend you to come to a face to face class. This is the only opportunity for students to get practice in a real exam hall and reduce exam stress."
+  },
+  {
+    question: "Is there a review session after the exams?",
+    answer: "Yes, following the mock exams, we conduct a thorough review session. This includes 2 hours for taking the exam and 2 hours for a detailed marking and review session, aimed at reinforcing learning and addressing any misunderstandings."
   }
+];
 
-  connectedCallback() {
-    this.shadowRoot.innerHTML = `
-      <style>
-        .faq-container {
-          font-family: Arial, sans-serif;
-          font-size: 20px; /* Make the text larger */
-          width: 90%; /* Increase the width */
-          margin: 20px auto; /* Center it on the page with spacing */
-          box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2); /* Add shadow for better visual appearance */
-          padding: 20px; /* Extra padding around the FAQ container */
-          background-color: white; /* Neutral background color */
-          border-radius: 10px; /* Rounded edges for the entire FAQ section */
-        }
+// Function to dynamically create the FAQ content
+function createFAQ() {
+  const faqContainer = document.getElementById("faq-container");
+  faqContainer.style.fontFamily = "Arial, sans-serif";
 
-        .question {
-          cursor: pointer;
-          padding: 15px; /* Add spacing */
-          background-color: #830303; /* Loyola theme color */
-          color: white;
-          border: none;
-          text-align: left;
-          outline: none;
-          font-size: 22px; /* Slightly larger font for questions */
-          font-weight: bold; /* Bold font */
-          font-family: Arial, sans-serif; /* Arial font for questions */
-          width: 100%;
-          border-radius: 8px; /* Rounded corners */
-          margin-bottom: 20px; /* Add gap between each question */
-          transition: background-color 0.3s ease; /* Smooth hover transition */
-        }
+  faqData.forEach(({ question, answer }) => {
+    // Create FAQ item
+    const faqItem = document.createElement("div");
+    faqItem.style.borderBottom = "1px solid #444";
+    faqItem.style.marginBottom = "20px";
+    faqItem.style.paddingBottom = "10px";
 
-        .question:hover {
-          background-color: #670202; /* Slightly darker hover effect */
-        }
-
-        .answer {
-          padding: 20px; /* Add spacing */
-          display: none;
-          background-color: #f9f9f9; /* Answer panel color */
-          color: #162d3d; /* Darker font color */
-          border-top: 3px solid #ddd; /* Border at the top for better aesthetics */
-          font-family: "Futura", sans-serif; /* Futura Light font for answers */
-          font-size: 18px; /* Slightly smaller font for answers */
-          border-radius: 8px; /* Match the rounded corners */
-          margin-top: -15px; /* Align nicely under the question */
-        }
-      </style>
-      <div class="faq-container">
-        <button class="question">Do the mock exams cost extra compared to Term 1 classes?</button>
-        <div class="answer">At Loyola, we have four terms of classes to get you ready for the GATE exam...</div>
-
-        <button class="question">Many of the other GATE companies do not share their exam papers, can we take Loyola papers home?</button>
-        <div class="answer">Yes of course! There is no point in taking the exam if you can’t take the exam home afterwards...</div>
-
-        <button class="question">What if I can't make it to the class because of the holidays?</button>
-        <div class="answer">If you're away, you can still join in online on Fridays through Zoom...</div>
-
-        <button class="question">Is there a review session after the exams?</button>
-        <div class="answer">Yes, following the mock exams, we conduct a thorough review session...</div>
-      </div>
+    // Create question element
+    const faqQuestion = document.createElement("div");
+    faqQuestion.style.display = "flex";
+    faqQuestion.style.justifyContent = "space-between";
+    faqQuestion.style.cursor = "pointer";
+    faqQuestion.style.fontSize = "18px";
+    faqQuestion.style.color = "#0d0d0d;
+    faqQuestion.style.padding = "10px 0";
+    faqQuestion.innerHTML = `
+      ${question} <span style="font-size: 20px; color: #730606;">+</span>
     `;
+    faqQuestion.addEventListener("click", () => toggleAnswer(faqAnswer, faqQuestion));
 
-    const questions = this.shadowRoot.querySelectorAll(".question");
-    questions.forEach((question) => {
-      question.addEventListener("click", () => {
-        const answer = question.nextElementSibling;
-        const isVisible = answer.style.display === "block";
-        answer.style.display = isVisible ? "none" : "block";
-      });
-    });
+    // Create answer element
+    const faqAnswer = document.createElement("div");
+    faqAnswer.style.display = "none";
+    faqAnswer.style.marginTop = "10px";
+    faqAnswer.style.color = "#474747";
+    faqAnswer.style.fontSize = "16px";
+    faqAnswer.style.lineHeight = "1.5";
+    faqAnswer.textContent = answer;
+
+    // Append question and answer to item
+    faqItem.appendChild(faqQuestion);
+    faqItem.appendChild(faqAnswer);
+
+    // Append item to container
+    faqContainer.appendChild(faqItem);
+  });
+}
+
+// Function to toggle the visibility of the answer
+function toggleAnswer(answerElement, questionElement) {
+  const icon = questionElement.querySelector("span");
+  if (answerElement.style.display === "block") {
+    answerElement.style.display = "none";
+    icon.textContent = "+";
+  } else {
+    answerElement.style.display = "block";
+    icon.textContent = "-";
   }
 }
 
-customElements.define("faq-element", FAQElement);
+// Call the function to create the FAQ
+document.addEventListener("DOMContentLoaded", createFAQ);
+
 
