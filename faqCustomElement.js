@@ -36,7 +36,7 @@ function createFAQ() {
     faqQuestion.style.justifyContent = "space-between";
     faqQuestion.style.cursor = "pointer";
     faqQuestion.style.fontSize = "18px";
-    faqQuestion.style.color = "#0d0d0d;
+    faqQuestion.style.color = "#0d0d0d";
     faqQuestion.style.padding = "10px 0";
     faqQuestion.innerHTML = `
       ${question} <span style="font-size: 20px; color: #730606;">+</span>
